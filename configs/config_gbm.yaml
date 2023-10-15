@@ -1,0 +1,5 @@
+model:
+  type: lgbm
+
+features:
+  type: desc2D
