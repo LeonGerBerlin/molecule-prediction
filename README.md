@@ -11,14 +11,12 @@ Installation
 1. Setup an environment either using conda or virtualenv.
 The code is tested so far with python 3.10.
 
-2. Install the dependencies from the `requirements.txt` file,
-e.g. `pip install -r requirements.txt`. Additionally, install manually
+2. Install the python package: `pip install -e .` or use the `requirements.txt` file. Additionally, install manually
 lightgbm (due to problems with M2 MacBook).
 
-3. Install the python package: `pip install -e .`
+3. Connect to your W&B account.
 
-4. Connect to your W&B account.
-
+4. Install `requirements_dev.txt` for tools like tox, black or flake.
 
 For M2 MacBook to install lightgbm:
 ```bash
