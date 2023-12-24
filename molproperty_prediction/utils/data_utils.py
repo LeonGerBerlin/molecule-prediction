@@ -4,12 +4,14 @@ import torch
 import yaml
 from ml_collections import config_dict
 from molfeat.trans import MoleculeTransformer
-from pathlib import Path
 
 from torch_geometric.data import Data
 from torch_geometric.loader import DataLoader
 
-from model.input_features import featurizer_simple, featurizer_advanced
+from molproperty_prediction.model.input_features import (
+    featurizer_simple,
+    featurizer_advanced,
+)
 
 
 def fix_seed(seed=1234):
@@ -17,12 +19,8 @@ def fix_seed(seed=1234):
     np.random.seed(seed)
 
 
-def load_csv_data(dataset="solubility"):
-    root_path = Path(__file__).absolute().parent.parent
-    if dataset == "solubility":
-        return pd.read_csv(root_path / "data/biogen_solubility.csv")
-    else:
-        raise ValueError(f"Dataset {dataset} not yet defined!")
+def load_csv_data(dataset_path):
+    return pd.read_csv(dataset_path)
 
 
 def load_config(config_path):
@@ -37,7 +35,8 @@ def normalize_label(labels, normalizing_constant=None):
     return labels / normalizing_constant, normalizing_constant
 
 
-def prepare_dataloader(smiles, property, config):
+def prepare_dataloader(smiles, property, config, shuffle=True):
+
     data_processed = []
     for smile, label in zip(smiles, property):
         if config.features.advanced_feat:
@@ -50,12 +49,13 @@ def prepare_dataloader(smiles, property, config):
                 x=x,
                 edge_index=edge_index,
                 edge_attr=edge_attr,
-                y=torch.tensor(label, dtype=torch.float32),  # TODO Add normalize values
+                y=torch.tensor(label, dtype=torch.float32) if label else torch.nan,
+                smile=smile,
             )
         )
 
     loader = DataLoader(
-        data_processed, batch_size=config.optimization.batch_size, shuffle=True
+        data_processed, batch_size=config.optimization.batch_size, shuffle=shuffle
     )
     return loader
 

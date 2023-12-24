@@ -1,0 +1,33 @@
+model:
+  type: "transformer" # "GCN", "GAT", "Transformer" or "gbm
+  architecture:
+      atom_embedder: True
+      nb_layer: 4
+      num_heads: 4
+      hidden_channels: 128
+      use_edge_attribution: False
+
+      layer_embed_nodes: 2
+      layer_embed_edges: 2
+
+      output_dim: 1
+      dropout: 0.5
+
+features:
+  advanced_feat: True
+  normalize_labels: False
+
+optimization:
+  n_epochs: 100
+  batch_size: 64
+  lr: 0.001
+  scheduler: "plateau"
+  patience_lr_scheduler: 10
+  order_mag_reduce: 10
+
+logging:
+  experiment_name: "sweep"
+  project_name: "mol-pred"
+
+loss:
+  type: "pearson"

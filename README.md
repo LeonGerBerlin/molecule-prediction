@@ -1,32 +1,89 @@
 **Work in progress**
 
-### Molecular prediction toolkit
+## Molecular property prediction framework
+A python package to perform molecular property prediction with pre-trained regression models.
 
-Simple molecule prediction tool for regression tasks:
+Free software: MIT license
 
-- Uses a solubility dataset for model optimization / testing.
-- Implements a MPNN framework with attention or graph convolution layers.
-- As baseline LightGBM is available.
-- For hyperparameter sweeps one can use W&B (see function `sweep_wb` in `utils/wandb_utils.py`).
+Installation
+--------
 
-### Getting started
+1. Setup an environment either using conda or virtualenv.
+The code is tested so far with python 3.10.
 
-1. Install all required packages (see `requirements.txt`).
-2. Create W&B account for logging training data.
-3. Log into W&B. 
-4. Call `main.py`. Fix data path.  
+2. Install the dependencies from the `requirements.txt` file,
+e.g. `pip install -r requirements.txt`. Additionally, install manually
+lightgbm (due to problems with M2 MacBook).
 
-### Datasets
+3. Install the python package: `pip install -e .`
 
-Solubility dataset, Fang et al.,
-"Prospective Validation of Machine Learning Algorithms for Absorption, Distribution, Metabolism, and Excretion Prediction: An Industrial Perspective", 2023.
+4. Connect to your W&B account.
 
 
-### Credits
+For M2 MacBook to install lightgbm:
+```bash
+conda install --yes -c conda-forge 'lightgbm>=3.3.3'
+```
 
-Input features
-- [DiffDock](https://github.com/gcorso/DiffDock) 
+Getting started
+--------
+For help about the command line flags:
+```bash
+molproperty_prediction -h
+```
 
-Dataset
-- Fang et al. (2023).
+### Optimizing machine learning model
+The code currently assumes a .csv for the dataset with `smiles` and `label` column name.
+
+#### Single training run
+Setup a training run with a .csv dataset:
+```bash
+ molproperty_prediction -m train -f "data/biogen_solubility.csv" --config-path "configs/config_mpnn.yml"
+ ```
+
+#### W&B Hyperparameter sweep
+To perform a hyperparameter sweep:
+```bash
+molproperty_prediction -m wb_sweep -f "data/biogen_solubility.csv" --wb-config-path "configs/config_wb.yml" --config-path "configs/config_mpnn.yaml"
+```
+In case you don't define the `wb-config-path` a default hyperparameter grid is used. Hyperparameter sweeps currently only work for GNN architectures and not
+machine learning models like `lgbm`.
+
+### Inference
+To use a pre-trained model call the package using the inference mode:
+```bash
+molproperty_prediction -m inference -f "data/biogen_solubility.csv" --checkpoint-path "checkpoints/model_checkpoint_ep_66_loss_0.33.pt"
+```
+The code file dump a .csv file with SMILES strings and predicted labels.
+
+
+Features
+--------
+*Disclaimer*: Not all features are rigorously tested.
+
+- Optimization of a GNN & LGBM machine learning model for a regression task using SMILES strings as input and prediction of a one dimensional regression value.
+- W&B logging: All runs get uploaded to your W&B project.
+- W&B Sweep: Hyperparameter sweep for a GNN.
+
+To Do's
+--------
+- Sphinx documentation
+- Pre-training for neural network approaches
+- Tests...
+
+Credits
+-------
+
+As a starting point a Cookiecutter template was used:
+- Cookiecutter: https://github.com/audreyr/cookiecutter
+- `audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+Input features:
+- [DiffDock](https://github.com/gcorso/DiffDock)
+
+Dataset:
+- Solubility dataset, Fang et al., "Prospective Validation of Machine Learning Algorithms for Absorption, Distribution, Metabolism, and Excretion Prediction: An Industrial Perspective", 2023.
 - https://practicalcheminformatics.blogspot.com/2023/06/getting-real-with-molecular-property.html
+
+
+

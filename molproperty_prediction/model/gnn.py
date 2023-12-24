@@ -4,15 +4,18 @@ from torch_geometric.nn import GCNConv, GATConv, TransformerConv
 from torch_geometric.utils import scatter
 from torch.nn import Linear
 
-from model.input_features import lig_feature_dims, edge_feature_dims
-from model.model_utils import MLP, AtomEncoder
+from molproperty_prediction.model.input_features import (
+    lig_feature_dims,
+    edge_feature_dims,
+)
+from molproperty_prediction.model.model_utils import MLP, AtomEncoder
 
 
-GNN_LAYER = dict(GAT=GATConv, GCN=GCNConv, Transformer=TransformerConv)
+GNN_LAYER = dict(gat=GATConv, gcn=GCNConv, transformer=TransformerConv)
 
 
 class GNN(torch.nn.Module):
-    def __init__(self, output_features, model_config):
+    def __init__(self, type, output_features, model_config):
         super().__init__()
         self.use_edge_attribution = model_config.use_edge_attribution
 
@@ -36,7 +39,7 @@ class GNN(torch.nn.Module):
 
         self.layers = torch.nn.ModuleList()
         for i in range(model_config.nb_layer):
-            conv = GNN_LAYER[model_config.name](
+            conv = GNN_LAYER[type](
                 model_config.hidden_channels, model_config.hidden_channels
             )
             self.layers.append(conv)

@@ -1,4 +1,4 @@
-Internal ID,Vendor ID,SMILES,logS
+Internal ID,Vendor ID,smiles,label
 Mol1,317714313,CNc1cc(Nc2cccn(-c3ccccn3)c2=O)nn2c(C(=O)N[C@@H]3C[C@@H]3F)cnc12,-5.54801969566953
 Mol2,324056965,CCOc1cc2nn(CCC(C)(C)O)cc2cc1NC(=O)c1cccc(C(F)F)n1,-5.071408991961754
 Mol4,194963090,CC(C)(Oc1ccc(-c2cnc(N)c(-c3ccc(Cl)cc3)c2)cc1)C(=O)O,-3.925969395299357

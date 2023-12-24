@@ -20,10 +20,30 @@ allowable_features = {
     "possible_degree_list": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "misc"],
     "possible_numring_list": [0, 1, 2, 3, 4, 5, 6, "misc"],
     "possible_implicit_valence_list": [0, 1, 2, 3, 4, 5, 6, "misc"],
-    "possible_formal_charge_list": [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, "misc"],
+    "possible_formal_charge_list": [
+        -5,
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        "misc",
+    ],
     "possible_numH_list": [0, 1, 2, 3, 4, 5, 6, 7, 8, "misc"],
     "possible_number_radical_e_list": [0, 1, 2, 3, 4, "misc"],
-    "possible_hybridization_list": ["SP", "SP2", "SP3", "SP3D", "SP3D2", "misc"],
+    "possible_hybridization_list": [
+        "SP",
+        "SP2",
+        "SP3",
+        "SP3D",
+        "SP3D2",
+        "misc",
+    ],
     "possible_is_aromatic_list": [False, True],
     "possible_is_in_ring3_list": [False, True],
     "possible_is_in_ring4_list": [False, True],
@@ -84,13 +104,15 @@ def featurizer_advanced(data):
         atom_features_list.append(
             [
                 safe_index(
-                    allowable_features["possible_atomic_num_list"], atom.GetAtomicNum()
+                    allowable_features["possible_atomic_num_list"],
+                    atom.GetAtomicNum(),
                 ),
                 allowable_features["possible_chirality_list"].index(
                     str(atom.GetChiralTag())
                 ),
                 safe_index(
-                    allowable_features["possible_degree_list"], atom.GetTotalDegree()
+                    allowable_features["possible_degree_list"],
+                    atom.GetTotalDegree(),
                 ),
                 safe_index(
                     allowable_features["possible_formal_charge_list"],
@@ -101,7 +123,8 @@ def featurizer_advanced(data):
                     atom.GetImplicitValence(),
                 ),
                 safe_index(
-                    allowable_features["possible_numH_list"], atom.GetTotalNumHs()
+                    allowable_features["possible_numH_list"],
+                    atom.GetTotalNumHs(),
                 ),
                 safe_index(
                     allowable_features["possible_number_radical_e_list"],
